@@ -1,52 +1,38 @@
+#!/usr/bin/python3
+"""
+0. Pascal's Triangle
+"""
+
 def pascal_triangle(n):
     """
-    Returns a list of lists of integers representing the Pascal's triangle of n.
+    Generates a list of lists representing Pascal's triangle up to n rows.
+    
+    Args:
+        n (int): The number of rows to generate in the triangle.
+    
+    Returns:
+        list: A list of lists representing the rows of Pascal's triangle.
     """
-    # If n is less than or equal to 0, return an empty list
-    if n <= 0:
-        return []
+    # Initialize an empty list to hold the rows of Pascal's triangle
+    res = []
     
-    # Initialize the list for Pascal's triangle with the first row
-    triangle = [[1]]
+    # Check if n is greater than 0
+    if n > 0:
+        # Iterate through each row from 1 to n
+        for i in range(1, n + 1):
+            # Initialize a list to hold the current row
+            level = []
+            # Start with the binomial coefficient (C) set to 1
+            C = 1
+            # Iterate through each element in the current row
+            for j in range(1, i + 1):
+                # Append the current binomial coefficient to the row
+                level.append(C)
+                # Calculate the next binomial coefficient
+                C = C * (i - j) // j
+            # Append the current row to the list of rows
+            res.append(level)
     
-    # Generate each row of the triangle
-    for i in range(1, n):
-        # Start the current row with 1
-        row = [1]
-        
-        # Calculate the interior values of the current row
-        for j in range(1, i):
-            # The value at position j in the current row is the sum of the values at
-            # positions j-1 and j in the previous row
-            row.append(triangle[i - 1][j - 1] + triangle[i - 1][j])
-        
-        # End the current row with 1
-        row.append(1)
-        
-        # Add the current row to the triangle list
-        triangle.append(row)
-    
-    return triangle
-
-def print_triangle(triangle):
-    """
-    Prints the Pascal's triangle in the required format.
-    """
-    for row in triangle:
-        print(f"{row}")
-
-if __name__ == "__main__":
-    # Define the main function to test the pascal_triangle function
-    def main():
-        # Define the input value for n (number of rows in Pascal's triangle)
-        n = 5
-        
-        # Call the pascal_triangle function to generate the triangle
-        triangle = pascal_triangle(n)
-        
-        # Call the print_triangle function to print the triangle in the required format
-        print_triangle(triangle)
-    
-    # Call the main function to execute the script
-    main()
+    # Return the list of rows representing Pascal's triangle
+    return res
 

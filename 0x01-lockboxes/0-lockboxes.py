@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 '''LockBoxes'''
 
@@ -28,4 +27,3 @@ def canUnlockAll(boxes):
         if a not in opened_boxes and a != 0:
             return False
     return True
-

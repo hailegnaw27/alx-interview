@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 '''LockBoxes'''
 
+
 def canUnlockAll(boxes):
     ''' checks if all boxes are opened and accessd by the keys on the
     previos box.

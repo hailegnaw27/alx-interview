@@ -1,37 +1,51 @@
 #!/usr/bin/python3
-'''Script for parsing log files.'''
+"""Script for computing metrics from stdin input."""
 
 import sys
 
-cache = {'200': 0, '301': 0, '400': 0, '401': 0,
-         '403': 0, '404': 0, '405': 0, '500': 0}
+# Initialize dictionary to store count of each status code
+status_codes_dict = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
+                     '404': 0, '405': 0, '500': 0}
+
 total_size = 0
-counter = 0
+count = 0  # keep count of the number of lines processed
 
 try:
     for line in sys.stdin:
         line_list = line.split(" ")
-        if len(line_list) > 4:
-            code = line_list[-2]
-            size = int(line_list[-1])
-            if code in cache.keys():
-                cache[code] += 1
-            total_size += size
-            counter += 1
 
-        if counter == 10:
-            counter = 0
-            print('File size: {}'.format(total_size))
-            for key, value in sorted(cache.items()):
+        # Check if the line follows the specified input format
+        if len(line_list) > 4:
+            status_code = line_list[-2]
+            file_size = int(line_list[-1])
+
+            # Increment count of status code occurrences
+            if status_code in status_codes_dict:
+                status_codes_dict[status_code] += 1
+
+            # Update total file size
+            total_size += file_size
+
+            # Update line count
+            count += 1
+
+        # Print statistics after every 10 lines
+        if count == 10:
+            count = 0  # Reset line count
+            print('Total file size: {}'.format(total_size))
+
+            # Print status code counts in ascending order
+            for key, value in sorted(status_codes_dict.items()):
                 if value != 0:
                     print('{}: {}'.format(key, value))
 
-except Exception as err:
-    pass
+except KeyboardInterrupt:
+    pass  # Handle keyboard interruption
 
 finally:
-    print('File size: {}'.format(total_size))
-    for key, value in sorted(cache.items()):
+    print('Total file size: {}'.format(total_size))
+    # Print final status code counts
+    for key, value in sorted(status_codes_dict.items()):
         if value != 0:
             print('{}: {}'.format(key, value)))
 

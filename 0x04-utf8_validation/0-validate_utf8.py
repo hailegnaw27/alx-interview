@@ -3,19 +3,20 @@
 UTF-8 Validation Module
 """
 
+
 def validUTF8(data):
     """
     Validate if the data set is a valid UTF-8 encoding.
 
-    :param data: List of integers representing bytes of data
-    :return: True if data is valid UTF-8 encoding, False otherwise
+    :param data: List of integers representing bytes o data
+    :return: True if data is valid.
     """
     num_bytes = 0
 
     for byte in data:
         if byte < 0 or byte > 255:
             return False
-        
+
         binary_repr = format(byte, '#010b')[-8:]
 
         if num_bytes == 0:
@@ -35,4 +36,3 @@ def validUTF8(data):
             num_bytes -= 1
 
     return num_bytes == 0
-

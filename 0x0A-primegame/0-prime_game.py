@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""0x0A-primegame"""
+
 
 def isWinner(x, nums):
     """x - rounds

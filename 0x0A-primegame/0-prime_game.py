@@ -1,41 +1,37 @@
 #!/usr/bin/python3
+def sieve(n):
+    """ Generate list of primes up to n using Sieve of Eratosthenes """
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    
+    p = 2
+    while (p * p <= n):
+        if (is_prime[p] == True):
+            for i in range(p * p, n + 1, p):
+                is_prime[i] = False
+        p += 1
+    
+    return [p for p in range(n + 1) if is_prime[p]]
+
+def prime_game(n, primes):
+    """ Play the game for a given number n using the list of primes """
+    multiples_removed = [False] * (n + 1)
+    turn = 0  # 0 for Maria's turn, 1 for Ben's turn
+    
+    for p in primes:
+        if p > n:
+            break
+        if not multiples_removed[p]:
+            turn += 1
+            for multiple in range(p, n + 1, p):
+                multiples_removed[multiple] = True
+    
+    # Maria starts first, so if turn is odd, Maria wins, otherwise Ben wins
+    return turn % 2 == 1
 
 def isWinner(x, nums):
-    def sieve(n):
-        is_prime = [True] * (n + 1)
-        p = 2
-        while p * p <= n:
-            if is_prime[p]:
-                for i in range(p * p, n + 1, p):
-                    is_prime[i] = False
-            p += 1
-        prime_numbers = [p for p in range(2, n + 1) if is_prime[p]]
-        return prime_numbers
-
-    def play_game(n, primes):
-        game_set = list(range(1, n + 1))
-        turn = 0  # Maria starts
-        
-        while True:
-            move_made = False
-            for p in primes:
-                if p > n:
-                    break
-                if game_set[p - 1] != 0:
-                    # Maria or Ben picks p
-                    for multiple in range(p, n + 1, p):
-                        game_set[multiple - 1] = 0
-                    move_made = True
-                    break
-            
-            if not move_made:
-                break
-            
-            turn = 1 - turn  # Switch turn
-        
-        return "Maria" if turn == 1 else "Ben"
-    
-    if x < 1 or not nums:
+    """ Determine the overall winner after x rounds """
+    if not nums or x <= 0:
         return None
     
     max_num = max(nums)
@@ -45,8 +41,7 @@ def isWinner(x, nums):
     ben_wins = 0
     
     for n in nums:
-        winner = play_game(n, primes)
-        if winner == "Maria":
+        if prime_game(n, primes):
             maria_wins += 1
         else:
             ben_wins += 1
@@ -57,4 +52,8 @@ def isWinner(x, nums):
         return "Ben"
     else:
         return None
+
+# Example Usage
+if __name__ == "__main__":
+    print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
 
